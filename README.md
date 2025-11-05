@@ -19,7 +19,13 @@ A secure healthcare audio transcription platform for healthcare professionals to
 
 ## Quick Start
 
-### Prerequisites
+### 🚀 Deploy on Railway
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/scribe-auggie)
+
+For detailed Railway deployment instructions, see [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md).
+
+### Prerequisites (Local Development)
 
 - Docker and Docker Compose
 - Node.js 20+ (for local development)
@@ -168,6 +174,26 @@ pytest
 # Frontend tests
 cd frontend
 npm test
+```
+
+## 🚀 Deployment
+
+### Railway (Recommended)
+
+This project is configured for easy deployment on Railway:
+
+1. **One-Click Deploy**: Use the Railway button above
+2. **Manual Deploy**: See [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) for detailed instructions
+3. **Environment Variables**: Configure required variables in Railway dashboard
+
+### Docker Production
+
+```bash
+# Build and run in production mode
+docker compose -f docker-compose.yml up -d
+
+# Or use the production override
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
 ## License

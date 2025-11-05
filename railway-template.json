@@ -1,0 +1,98 @@
+{
+  "name": "Audio Transcription Service",
+  "description": "A secure healthcare audio transcription platform with React frontend, FastAPI backend, and MySQL database",
+  "repository": "https://github.com/leonj1/scribe-auggie",
+  "services": [
+    {
+      "name": "backend",
+      "source": {
+        "repo": "leonj1/scribe-auggie",
+        "rootDirectory": "backend"
+      },
+      "build": {
+        "builder": "NIXPACKS",
+        "buildCommand": "pip install -r requirements.txt"
+      },
+      "deploy": {
+        "startCommand": "uvicorn main:app --host 0.0.0.0 --port $PORT",
+        "healthcheckPath": "/health",
+        "healthcheckTimeout": 300
+      },
+      "variables": {
+        "PORT": "8000",
+        "PYTHONPATH": "/app",
+        "DEBUG": "false",
+        "LOG_LEVEL": "INFO",
+        "MYSQL_URL": "${{MySQL.DATABASE_URL}}",
+        "GOOGLE_CLIENT_ID": "",
+        "GOOGLE_CLIENT_SECRET": "",
+        "JWT_SECRET": "",
+        "LLM_API_KEY": "",
+        "AUDIO_STORAGE_PATH": "/app/audio_storage"
+      }
+    },
+    {
+      "name": "frontend",
+      "source": {
+        "repo": "leonj1/scribe-auggie",
+        "rootDirectory": "frontend"
+      },
+      "build": {
+        "builder": "NIXPACKS",
+        "buildCommand": "npm install && npm run build"
+      },
+      "deploy": {
+        "startCommand": "npx serve -s build -l $PORT",
+        "healthcheckPath": "/",
+        "healthcheckTimeout": 300
+      },
+      "variables": {
+        "PORT": "3000",
+        "NODE_ENV": "production",
+        "REACT_APP_API_URL": "${{backend.RAILWAY_PUBLIC_DOMAIN}}",
+        "REACT_APP_GOOGLE_CLIENT_ID": ""
+      }
+    },
+    {
+      "name": "MySQL",
+      "source": {
+        "image": "mysql:8.0"
+      },
+      "variables": {
+        "MYSQL_ROOT_PASSWORD": "",
+        "MYSQL_DATABASE": "audio_transcription",
+        "MYSQL_USER": "appuser",
+        "MYSQL_PASSWORD": ""
+      }
+    }
+  ],
+  "variables": {
+    "GOOGLE_CLIENT_ID": {
+      "description": "Google OAuth2 Client ID for authentication",
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "description": "Google OAuth2 Client Secret for authentication",
+      "required": true
+    },
+    "JWT_SECRET": {
+      "description": "Secret key for JWT token signing",
+      "required": true,
+      "generate": true
+    },
+    "LLM_API_KEY": {
+      "description": "API key for LLM provider (RequestyAI)",
+      "required": true
+    },
+    "MYSQL_ROOT_PASSWORD": {
+      "description": "MySQL root password",
+      "required": true,
+      "generate": true
+    },
+    "MYSQL_PASSWORD": {
+      "description": "MySQL application user password",
+      "required": true,
+      "generate": true
+    }
+  }
+}

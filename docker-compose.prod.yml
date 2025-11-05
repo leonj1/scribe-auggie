@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    environment:
+      - DEBUG=false
+      - LOG_LEVEL=WARNING
+    restart: unless-stopped
+    
+  frontend:
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    
+  mysql:
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    
+volumes:
+  mysql_data:
+    driver: local
+  audio_storage:
+    driver: local
